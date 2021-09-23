@@ -20,12 +20,12 @@ RUN set -ex && \
         openssl \
         openssh-client \
         ca-certificates && \
-    mkdir -p /usr/src/node-red /home/data && \
+    mkdir -p /usr/src/node-red /home/site/wwwroot/data && \
     deluser --remove-home node && \
     adduser -h /usr/src/node-red -D -H node-red -u 1000 && \
-    # chown -R node-red:root /home/data && chmod -R g+rwX /home/data && \
+    # chown -R node-red:root /home/site/wwwroot/data && chmod -R g+rwX /home/site/wwwroot/data && \
     # chown -R node-red:root /usr/src/node-red && chmod -R g+rwX /usr/src/node-red
-    chown -R node-red:node-red /home/data && \
+    chown -R node-red:node-red /home/site/wwwroot/data && \
     chown -R node-red:node-red /usr/src/node-red
 
 # Set work directory
@@ -37,8 +37,8 @@ RUN ./known_hosts.sh /etc/ssh/ssh_known_hosts && rm /usr/src/node-red/known_host
 
 # package.json contains Node-RED NPM module and node dependencies
 COPY package.json .
-COPY settings.js /home/data
-COPY flows.json /home/data
+COPY settings.js /home/site/wwwroot/data
+COPY flows.json /home/site/wwwroot/data
 
 #### Stage BUILD #######################################################################################################
 FROM base AS build
@@ -82,7 +82,7 @@ USER node-red
 
 # Env variables
 ENV NODE_RED_VERSION=$NODE_RED_VERSION \
-    NODE_PATH=/usr/src/node-red/node_modules:/home/data/node_modules \
+    NODE_PATH=/usr/src/node-red/node_modules:/home/site/wwwroot/data/node_modules \
     PATH=/usr/src/node-red/node_modules/.bin:${PATH} \
     FLOWS=flows.json
 
@@ -96,4 +96,4 @@ EXPOSE 2222
 # Add a healthcheck (default every 30 secs)
 # HEALTHCHECK CMD curl http://localhost:1880/ || exit 1
 
-ENTRYPOINT ["npm", "start", "--cache", "/home/data/.npm", "--", "--userDir", "/home/data"]
+ENTRYPOINT ["npm", "start", "--cache", "/home/site/wwwroot/data/.npm", "--", "--userDir", "/home/site/wwwroot/data"]

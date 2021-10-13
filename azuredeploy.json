@@ -52,7 +52,7 @@
             },
             "properties": {
               "DOCKER_CUSTOM_IMAGE_NAME": "ionutcarp/node-red-docker-az-web-app",
-              "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "true",
+              "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
               "WEBSITE_PORT": "1880"
             }
           }
